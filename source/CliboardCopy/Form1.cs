@@ -10,37 +10,59 @@ namespace CliboardCopy
         }
 
         Thread tracker_thread;
-        bool should_track = false;
-        Mutex mutex = new Mutex();
+        UInt32 tracking_id = 0;
         HashSet<string> results = new HashSet<string>();
 
         private void ClipboardBegin_Click(object sender, EventArgs e)
         {
+            if (!ClipboardBegin.Enabled)
+            {
+                return;
+            }
+
+            if (clearClipCheckbox.Checked)
+            {
+                Clipboard.Clear();
+            }
+
             ClipboardBegin.Enabled = false;
+            clearClipCheckbox.Enabled = false;
 
             if (tracker_thread == null)
             {
-                should_track = true;
+                // ID to invaldate discarded callbacks
+                UInt32 old_id = ++tracking_id;
 
                 tracker_thread = new Thread(() =>
                 {
-                    var getter = () => { try { return Clipboard.GetText(); } catch { return ""; } };
-
                     string last_cached = "";
                     string current = "";
                     IAsyncResult async_res = null;
 
-                    while (should_track)
+                    while (old_id == tracking_id)
                     {
+                        Thread.Sleep(10);
+
                         if (async_res != null && !async_res.IsCompleted)
                         {
-                            Thread.Sleep(10);
                             continue;
                         }
 
                         async_res = this.BeginInvoke(() =>
                         {
-                            current = Clipboard.GetText();
+                            try
+                            {
+                                current = Clipboard.GetText();
+                            }
+                            catch
+                            {
+                                current = "";
+                            }
+
+                            if (current.Length == 0 || old_id != tracking_id)
+                            {
+                                return;
+                            }
 
                             // Optimization (not relavant as long as it is the same thread
                             //if (last_cached != current)
@@ -52,6 +74,7 @@ namespace CliboardCopy
                                     {
                                         results.Add(current);
                                         ResultsNum.Text = "Results count: " + results.Count;
+                                        button1.Enabled = true;
                                     }
                                 }
                             }
@@ -63,17 +86,20 @@ namespace CliboardCopy
 
                 tracker_thread.Start();
             }
-
-            button1.Enabled = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (!button1.Enabled)
+            {
+                return;
+            }
+
             button1.Enabled = false;
-            should_track = false;
 
             if (tracker_thread != null)
             {
+                tracking_id++;
                 tracker_thread.Join();
                 tracker_thread = null;
 
@@ -102,6 +128,7 @@ namespace CliboardCopy
                 }
             }
 
+            clearClipCheckbox.Enabled = true;
             ClipboardBegin.Enabled = true;
         }
 

@@ -33,15 +33,19 @@
             richTextBox1 = new RichTextBox();
             ResultsNum = new Label();
             linkLabel1 = new LinkLabel();
+            clearClipCheckbox = new CheckBox();
+            panel1 = new Panel();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // button1
             // 
+            button1.Dock = DockStyle.Bottom;
             button1.Enabled = false;
             button1.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            button1.Location = new Point(-2, 123);
+            button1.Location = new Point(0, 157);
             button1.Name = "button1";
-            button1.Size = new Size(540, 62);
+            button1.Size = new Size(538, 62);
             button1.TabIndex = 0;
             button1.Text = "Stop And Output Results";
             button1.UseVisualStyleBackColor = true;
@@ -49,10 +53,11 @@
             // 
             // ClipboardBegin
             // 
+            ClipboardBegin.Dock = DockStyle.Top;
             ClipboardBegin.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            ClipboardBegin.Location = new Point(-2, 36);
+            ClipboardBegin.Location = new Point(0, 42);
             ClipboardBegin.Name = "ClipboardBegin";
-            ClipboardBegin.Size = new Size(540, 67);
+            ClipboardBegin.Size = new Size(538, 57);
             ClipboardBegin.TabIndex = 1;
             ClipboardBegin.Text = "Begin Clipboard Listening";
             ClipboardBegin.UseVisualStyleBackColor = true;
@@ -60,9 +65,11 @@
             // 
             // richTextBox1
             // 
+            richTextBox1.BackColor = SystemColors.ControlLightLight;
             richTextBox1.Dock = DockStyle.Bottom;
-            richTextBox1.Location = new Point(0, 204);
+            richTextBox1.Location = new Point(0, 219);
             richTextBox1.Name = "richTextBox1";
+            richTextBox1.ReadOnly = true;
             richTextBox1.Size = new Size(538, 330);
             richTextBox1.TabIndex = 3;
             richTextBox1.Text = "";
@@ -70,16 +77,17 @@
             // ResultsNum
             // 
             ResultsNum.AutoSize = true;
-            ResultsNum.Location = new Point(195, 9);
+            ResultsNum.Font = new Font("Segoe UI", 10F);
+            ResultsNum.Location = new Point(203, 12);
             ResultsNum.Name = "ResultsNum";
-            ResultsNum.Size = new Size(90, 15);
+            ResultsNum.Size = new Size(107, 19);
             ResultsNum.TabIndex = 4;
-            ResultsNum.Text = "Results count: 0";
+            ResultsNum.Text = "Results Saved: 0";
             // 
             // linkLabel1
             // 
             linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(364, 9);
+            linkLabel1.Location = new Point(373, 14);
             linkLabel1.Name = "linkLabel1";
             linkLabel1.Size = new Size(137, 15);
             linkLabel1.TabIndex = 6;
@@ -87,20 +95,44 @@
             linkLabel1.Text = "Made By: Elad Ashkenazi";
             linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
+            // clearClipCheckbox
+            // 
+            clearClipCheckbox.AutoSize = true;
+            clearClipCheckbox.Checked = true;
+            clearClipCheckbox.CheckState = CheckState.Checked;
+            clearClipCheckbox.Location = new Point(12, 109);
+            clearClipCheckbox.Name = "clearClipCheckbox";
+            clearClipCheckbox.Size = new Size(180, 19);
+            clearClipCheckbox.TabIndex = 7;
+            clearClipCheckbox.Text = "Clear Previous Clipboard Text";
+            clearClipCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(ResultsNum);
+            panel1.Controls.Add(linkLabel1);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(538, 42);
+            panel1.TabIndex = 8;
+            // 
             // WindowForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(538, 534);
-            Controls.Add(linkLabel1);
-            Controls.Add(ResultsNum);
-            Controls.Add(richTextBox1);
+            ClientSize = new Size(538, 549);
             Controls.Add(ClipboardBegin);
+            Controls.Add(panel1);
             Controls.Add(button1);
+            Controls.Add(clearClipCheckbox);
+            Controls.Add(richTextBox1);
             Name = "WindowForm";
-            Text = "Cliboard Listener";
+            Text = "Clipboard Dumper";
             Load += WindowForm_Load;
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -112,5 +144,7 @@
         private RichTextBox richTextBox1;
         private Label ResultsNum;
         private LinkLabel linkLabel1;
+        private CheckBox clearClipCheckbox;
+        private Panel panel1;
     }
 }
