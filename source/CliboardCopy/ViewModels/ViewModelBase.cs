@@ -44,6 +44,10 @@ public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
     /// </summary>
     protected abstract void OnDispose();
 
+    /// <summary>
+    /// Display error message
+    /// </summary>
+    /// <param name="ex"></param>
     protected void DisplayError(Exception ex)
     {
         MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

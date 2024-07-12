@@ -18,10 +18,16 @@ public class MainViewModel : ViewModelBase
         _clipboardMonitorService.ClipboardChanged += _clipboardMonitorService_ClipboardChanged;
     }
 
+    /// <summary>
+    /// Clipboard history log records
+    /// </summary>
     public BindingList<ClipboardHistoryItemBase> Items { get; }
 
     private bool _logEnabled;
 
+    /// <summary>
+    /// TRUE - If logging enabled
+    /// </summary>
     public bool LogEnabled
     {
         get => _logEnabled;
@@ -32,8 +38,15 @@ public class MainViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// TRUE - If user can enable logging
+    /// </summary>
     public bool CanStartLogging => !_logEnabled;
 
+    /// <summary>
+    /// Start clipboard changes logging
+    /// </summary>
+    /// <returns></returns>
     public async Task StartLogAsync()
     {
         try
@@ -50,6 +63,10 @@ public class MainViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Stop clipboard changes logging
+    /// </summary>
+    /// <returns></returns>
     public async Task StopLogAsync()
     {
         try
@@ -66,6 +83,12 @@ public class MainViewModel : ViewModelBase
         }
     }
 
+    protected override void OnDispose()
+    {
+        _clipboardMonitorService.ClipboardChanged -= _clipboardMonitorService_ClipboardChanged;
+        ClearHistory();
+    }
+
     private void _clipboardMonitorService_ClipboardChanged(object? sender, ClipboardUpdatedEventArgs e)
     {
         try
@@ -74,6 +97,7 @@ public class MainViewModel : ViewModelBase
 
             if (e.Item is ClipboardHistoryItemImage imageItem)
             {
+                // If image with same hash already in log - skip it
                 if (Items.OfType<ClipboardHistoryItemImage>().Any(item => item.ImageHash == imageItem.ImageHash)) return;
             }
 
@@ -83,12 +107,6 @@ public class MainViewModel : ViewModelBase
         {
             DisplayError(ex);
         }
-    }
-
-    protected override void OnDispose()
-    {
-        _clipboardMonitorService.ClipboardChanged -= _clipboardMonitorService_ClipboardChanged;
-        ClearHistory();
     }
 
     private void ClearHistory()

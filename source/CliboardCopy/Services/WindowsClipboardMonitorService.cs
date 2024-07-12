@@ -3,6 +3,10 @@ using CliboardCopy.Models;
 
 namespace CliboardCopy.Services;
 
+/// <summary>
+/// Windows API based clipboard monitoring service implementation
+/// </summary>
+/// <remarks>Service exists as Singletone</remarks>
 public class WindowsClipboardMonitorService : IClipboardMonitorService
 {
     private static readonly WindowsClipboardMonitorService _instance = null!;
@@ -26,9 +30,24 @@ public class WindowsClipboardMonitorService : IClipboardMonitorService
     /// <remarks>UI-thread friendly</remarks>
     public event EventHandler<ClipboardUpdatedEventArgs> ClipboardChanged = null!;
 
+    /// <inheritdoc/>
+    public Task StartAsync()
+    {
+        _messageOnlyWindow.Start();
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    public Task StopAsync()
+    {
+        _messageOnlyWindow.Stop();
+        return Task.CompletedTask;
+    }
+
     /// <summary>
     /// Message-only helper form
     /// </summary>
+    /// <remarks>Unvisible form used to monitor clipboard changed events</remarks>
     private class MessageOnlyWindow : Form
     {
         private readonly SynchronizationContext? _synchronizationContext;
@@ -92,17 +111,5 @@ public class WindowsClipboardMonitorService : IClipboardMonitorService
                 base.WndProc(ref m);
             }
         }
-    }
-
-    public Task StartAsync()
-    {
-        _messageOnlyWindow.Start();
-        return Task.CompletedTask;
-    }
-
-    public Task StopAsync()
-    {
-        _messageOnlyWindow.Stop();
-        return Task.CompletedTask;
     }
 }
