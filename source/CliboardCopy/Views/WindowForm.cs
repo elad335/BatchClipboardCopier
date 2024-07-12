@@ -2,16 +2,22 @@ using System.Diagnostics;
 
 namespace CliboardCopy
 {
+    /// <summary>
+    /// Main application view
+    /// </summary>
     public partial class WindowForm : Form
     {
+        /// <summary>
+        ///
+        /// </summary>
         public WindowForm()
         {
             InitializeComponent();
         }
 
-        Thread tracker_thread;
-        UInt32 tracking_id = 0;
-        HashSet<string> results = new HashSet<string>();
+        private Thread tracker_thread;
+        private UInt32 tracking_id = 0;
+        private HashSet<string> results = new HashSet<string>();
 
         private void ClipboardBegin_Click(object sender, EventArgs e)
         {
@@ -134,7 +140,6 @@ namespace CliboardCopy
 
         private void WindowForm_Load(object sender, EventArgs e)
         {
-
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

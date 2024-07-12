@@ -92,7 +92,7 @@
             linkLabel1.Size = new Size(137, 15);
             linkLabel1.TabIndex = 6;
             linkLabel1.TabStop = true;
-            linkLabel1.Text = "Made By: Elad Ashkenazi";
+            linkLabel1.Text = "Made By: Elad335";
             linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
             // clearClipCheckbox
