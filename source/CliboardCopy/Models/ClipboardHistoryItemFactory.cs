@@ -1,5 +1,8 @@
 ﻿namespace CliboardCopy.Models;
 
+/// <summary>
+/// Clipboard history items factory class
+/// </summary>
 public class ClipboardHistoryItemFactory
 {
     private readonly bool _logImages;
@@ -9,6 +12,10 @@ public class ClipboardHistoryItemFactory
         _logImages = logImages;
     }
 
+    /// <summary>
+    /// Build new log item, based on current clipboard content
+    /// </summary>
+    /// <returns></returns>
     public ClipboardHistoryItemBase? BuildNewItem()
     {
         var text = Clipboard.GetText();

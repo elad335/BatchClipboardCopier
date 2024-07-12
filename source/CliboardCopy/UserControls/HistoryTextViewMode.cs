@@ -4,6 +4,9 @@ using CliboardCopy.Models;
 
 namespace CliboardCopy.UserControls
 {
+    /// <summary>
+    /// Clipboard history text display mode view
+    /// </summary>
     public partial class HistoryTextViewMode : UserControl
     {
         private const string IMAGE_LINK_PREFIX = "file://image_";
@@ -15,6 +18,10 @@ namespace CliboardCopy.UserControls
 
         private BindingList<ClipboardHistoryItemBase>? _items;
 
+        /// <summary>
+        /// Bind property to clipboard history log items collection
+        /// </summary>
+        [Description("Log items")]
         public BindingList<ClipboardHistoryItemBase>? Items
         {
             get => _items;
@@ -81,11 +88,11 @@ namespace CliboardCopy.UserControls
                 switch (item)
                 {
                     case ClipboardHistoryItemText textItem:
-                        txtContent.AppendText($"{textItem.Time.ToShortDateString()} {textItem.Time.ToShortTimeString()} {textItem.Text}\r");
+                        txtContent.AppendText($" {textItem.Text}\r\r");
                         break;
 
                     case ClipboardHistoryItemImage imageItem:
-                        txtContent.AppendText($"{imageItem.Time.ToShortDateString()} {imageItem.Time.ToShortTimeString()} {IMAGE_LINK_PREFIX}{imageItem.Id}\r");
+                        txtContent.AppendText($"{imageItem.Time.ToShortDateString()} {imageItem.Time.ToShortTimeString()} {IMAGE_LINK_PREFIX}{imageItem.Id}\r\r");
                         break;
                 }
             }

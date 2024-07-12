@@ -2,6 +2,9 @@
 
 namespace CliboardCopy.Models;
 
+/// <summary>
+/// Clipboard image representer class
+/// </summary>
 public class ClipboardHistoryItemImage : ClipboardHistoryItemBase
 {
     public ClipboardHistoryItemImage(Image image)
@@ -22,8 +25,9 @@ public class ClipboardHistoryItemImage : ClipboardHistoryItemBase
     public Image Image { get; }
 
     /// <summary>
-    /// Anti duplication protection
+    /// Image MD5 hash
     /// </summary>
+    /// <remarks>Duplication protection</remarks>
     public string ImageHash { get; }
 
     public override void Dispose()
