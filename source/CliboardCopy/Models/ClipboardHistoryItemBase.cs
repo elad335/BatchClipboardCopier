@@ -15,8 +15,14 @@ public abstract class ClipboardHistoryItemBase : IDisposable
         Time = time;
     }
 
+    /// <summary>
+    /// Entry unique identifier
+    /// </summary>
     public Guid Id { get; } = Guid.NewGuid();
 
+    /// <summary>
+    /// Entry creation time
+    /// </summary>
     public DateTime Time { get; }
 
     public virtual void Dispose()
