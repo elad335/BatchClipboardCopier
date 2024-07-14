@@ -75,7 +75,6 @@ public class MainViewModel : ViewModelBase
 
             LogEnabled = false;
             await _clipboardMonitorService.StopAsync();
-            ClearHistory();
         }
         catch (Exception ex)
         {
@@ -99,6 +98,12 @@ public class MainViewModel : ViewModelBase
             {
                 // If image with same hash already in log - skip it
                 if (Items.OfType<ClipboardHistoryItemImage>().Any(item => item.ImageHash == imageItem.ImageHash)) return;
+            }
+
+            if (e.Item is ClipboardHistoryItemText textItem)
+            {
+                // If text exists - skip it
+                if (Items.OfType<ClipboardHistoryItemText>().Any(item => item.Text == textItem.Text)) return;
             }
 
             Items.Add(e.Item);

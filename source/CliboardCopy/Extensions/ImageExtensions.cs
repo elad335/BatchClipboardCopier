@@ -14,7 +14,7 @@ public static class ImageExtensions
         using (var md5 = MD5.Create())
         using (var ms = new MemoryStream())
         {
-            image.Save(ms, image.RawFormat);
+            image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
             ms.Position = 0;
             return BitConverter.ToString(md5.ComputeHash(ms));
         }
