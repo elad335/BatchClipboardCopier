@@ -88,11 +88,11 @@ namespace CliboardCopy.UserControls
                 switch (item)
                 {
                     case ClipboardHistoryItemText textItem:
-                        txtContent.AppendText($" {textItem.Text}\r\r");
+                        txtContent.AppendText($" {textItem.Text}\r");
                         break;
 
                     case ClipboardHistoryItemImage imageItem:
-                        txtContent.AppendText($"{imageItem.Time.ToShortDateString()} {imageItem.Time.ToShortTimeString()} {IMAGE_LINK_PREFIX}{imageItem.Id}\r\r");
+                        txtContent.AppendText($"{imageItem.Time.ToShortDateString()} {imageItem.Time.ToShortTimeString()} {IMAGE_LINK_PREFIX}{imageItem.Id}\r");
                         break;
                 }
             }
