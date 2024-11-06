@@ -33,6 +33,7 @@
             ResultsNum = new Label();
             lnkLabelCreatedBy = new LinkLabel();
             panel1 = new Panel();
+            ResultsTypeTxt = new TextBox();
             tabControlViewModes = new TabControl();
             tabTextViewMode = new TabPage();
             historyTextViewMode1 = new UserControls.HistoryTextViewMode();
@@ -71,7 +72,7 @@
             // 
             ResultsNum.AutoSize = true;
             ResultsNum.Font = new Font("Segoe UI", 10F);
-            ResultsNum.Location = new Point(203, 12);
+            ResultsNum.Location = new Point(138, 12);
             ResultsNum.Name = "ResultsNum";
             ResultsNum.Size = new Size(107, 19);
             ResultsNum.TabIndex = 4;
@@ -90,6 +91,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(ResultsTypeTxt);
             panel1.Controls.Add(ResultsNum);
             panel1.Controls.Add(lnkLabelCreatedBy);
             panel1.Dock = DockStyle.Top;
@@ -98,13 +100,22 @@
             panel1.Size = new Size(538, 42);
             panel1.TabIndex = 8;
             // 
+            // ResultsTypeTxt
+            // 
+            ResultsTypeTxt.Location = new Point(251, 11);
+            ResultsTypeTxt.Name = "ResultsTypeTxt";
+            ResultsTypeTxt.Size = new Size(100, 23);
+            ResultsTypeTxt.TabIndex = 10;
+            ResultsTypeTxt.Text = "https://";
+            ResultsTypeTxt.TextChanged += textBox1_TextChanged;
+            // 
             // tabControlViewModes
             // 
             tabControlViewModes.Controls.Add(tabTextViewMode);
             tabControlViewModes.Controls.Add(tabImageViewMode);
             tabControlViewModes.Dock = DockStyle.Bottom;
             tabControlViewModes.Location = new Point(0, 178);
-            tabControlViewModes.Margin = new Padding(2, 2, 2, 2);
+            tabControlViewModes.Margin = new Padding(2);
             tabControlViewModes.Name = "tabControlViewModes";
             tabControlViewModes.SelectedIndex = 0;
             tabControlViewModes.Size = new Size(538, 374);
@@ -114,9 +125,9 @@
             // 
             tabTextViewMode.Controls.Add(historyTextViewMode1);
             tabTextViewMode.Location = new Point(4, 24);
-            tabTextViewMode.Margin = new Padding(2, 2, 2, 2);
+            tabTextViewMode.Margin = new Padding(2);
             tabTextViewMode.Name = "tabTextViewMode";
-            tabTextViewMode.Padding = new Padding(2, 2, 2, 2);
+            tabTextViewMode.Padding = new Padding(2);
             tabTextViewMode.Size = new Size(530, 346);
             tabTextViewMode.TabIndex = 0;
             tabTextViewMode.Text = "Text Mode";
@@ -127,7 +138,7 @@
             historyTextViewMode1.Dock = DockStyle.Fill;
             historyTextViewMode1.Items = null;
             historyTextViewMode1.Location = new Point(2, 2);
-            historyTextViewMode1.Margin = new Padding(1, 1, 1, 1);
+            historyTextViewMode1.Margin = new Padding(1);
             historyTextViewMode1.Name = "historyTextViewMode1";
             historyTextViewMode1.Size = new Size(526, 342);
             historyTextViewMode1.TabIndex = 0;
@@ -135,9 +146,9 @@
             // tabImageViewMode
             // 
             tabImageViewMode.Location = new Point(4, 24);
-            tabImageViewMode.Margin = new Padding(2, 2, 2, 2);
+            tabImageViewMode.Margin = new Padding(2);
             tabImageViewMode.Name = "tabImageViewMode";
-            tabImageViewMode.Padding = new Padding(2, 2, 2, 2);
+            tabImageViewMode.Padding = new Padding(2);
             tabImageViewMode.Size = new Size(530, 346);
             tabImageViewMode.TabIndex = 1;
             tabImageViewMode.Text = "Images";
@@ -175,5 +186,6 @@
         private TabPage tabTextViewMode;
         private TabPage tabImageViewMode;
         private UserControls.HistoryTextViewMode historyTextViewMode1;
+        private TextBox ResultsTypeTxt;
     }
 }
