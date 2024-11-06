@@ -54,5 +54,10 @@
         #endregion
 
         private RichTextBox txtContent;
+
+        public string GetText()
+        {
+            return txtContent.Text;
+        }
     }
 }

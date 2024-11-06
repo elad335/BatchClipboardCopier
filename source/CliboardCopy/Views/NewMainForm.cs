@@ -21,6 +21,7 @@ namespace CliboardCopy
             btnStartClipboardLogging.DataBindings.Add(nameof(Button.Enabled), _viewModel, nameof(_viewModel.CanStartLogging));
             btnStopClipboardLogging.DataBindings.Add(nameof(Button.Enabled), _viewModel, nameof(_viewModel.LogEnabled));
             historyTextViewMode1.DataBindings.Add(nameof(historyTextViewMode1.Items), _viewModel, nameof(_viewModel.Items));
+            _viewModel.InsertChangeFunc(textBox1_TextChanged);
         }
 
         private async void btnStartClipboardLogging_Click(object sender, EventArgs e)
@@ -77,6 +78,41 @@ namespace CliboardCopy
         private void NewMainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _viewModel.Dispose();
+        }
+
+        public void textBox1_TextChanged(object? sender, EventArgs e)
+        {
+            string text = ResultsTypeTxt.Text;
+            string history = historyTextViewMode1.GetText();
+
+            if (history.Length < text.Length || text.Length == 0)
+            {
+                ResultsNum.Text = "Results Saved: 0";
+                return;
+            }
+
+            int count = 0;
+
+            for (int i = 0; i < history.Length;)
+            {
+                if (text[0] != history[i])
+                {
+                    i++;
+                    continue;
+                }
+
+                if (string.Compare(text, 0, history, i, text.Length) == 0)
+                {
+                    i += text.Length;
+                    count++;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+
+            ResultsNum.Text = "Results Saved: " + count.ToString();
         }
     }
 }

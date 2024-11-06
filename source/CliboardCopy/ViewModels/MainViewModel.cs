@@ -10,6 +10,7 @@ namespace CliboardCopy.ViewModels;
 public class MainViewModel : ViewModelBase
 {
     private readonly IClipboardMonitorService _clipboardMonitorService;
+    private EventHandler textChangedHanlder;
 
     public MainViewModel(IClipboardMonitorService clipboardMonitorService)
     {
@@ -107,6 +108,7 @@ public class MainViewModel : ViewModelBase
             }
 
             Items.Add(e.Item);
+            textChangedHanlder.Invoke(this, e);
         }
         catch (Exception ex)
         {
@@ -131,10 +133,16 @@ public class MainViewModel : ViewModelBase
             }
 
             Items.Clear();
+            textChangedHanlder.Invoke(this, EventArgs.Empty);
         }
         catch (Exception ex)
         {
             DisplayError(ex);
         }
+    }
+
+    public void InsertChangeFunc(Action<object?, EventArgs> func)
+    {
+        textChangedHanlder += func.Invoke;
     }
 }
