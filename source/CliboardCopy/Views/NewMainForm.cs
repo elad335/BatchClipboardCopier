@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using CliboardCopy.Services;
 using CliboardCopy.ViewModels;
 
@@ -17,6 +18,7 @@ namespace CliboardCopy
         public NewMainForm()
         {
             InitializeComponent();
+            WriteLog("", ref log_file);
             _viewModel = new MainViewModel(WindowsClipboardMonitorService.Instance);
             btnStartClipboardLogging.DataBindings.Add(nameof(Button.Enabled), _viewModel, nameof(_viewModel.CanStartLogging));
             btnStopClipboardLogging.DataBindings.Add(nameof(Button.Enabled), _viewModel, nameof(_viewModel.LogEnabled));
@@ -80,10 +82,39 @@ namespace CliboardCopy
             _viewModel.Dispose();
         }
 
+         FileStream log_file = null;
+
+        public static void WriteLog(string strLog, ref FileStream fileStream)
+        {
+            DirectoryInfo logDirInfo = null;
+            FileInfo logFileInfo;
+ 
+            if (fileStream == null || string.IsNullOrEmpty(strLog))
+            {
+                string logFilePath = "C:\\ClipBoardCopy\\";
+
+                logFilePath = logFilePath + "Log-" + System.DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+                logFileInfo = new FileInfo(logFilePath);
+                logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+
+                if (!logDirInfo.Exists) logDirInfo.Create();
+            
+                fileStream = new FileStream(logFilePath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+                fileStream.SetLength(0);
+                fileStream.Seek(0, SeekOrigin.Begin);
+                strLog = "";
+            }
+
+            fileStream.Write(Encoding.ASCII.GetBytes(strLog.Substring((int)fileStream.Position)));
+            fileStream.Flush();
+        }
+
         public void textBox1_TextChanged(object? sender, EventArgs e)
         {
             string text = ResultsTypeTxt.Text;
             string history = historyTextViewMode1.GetText();
+
+            WriteLog(history, ref log_file);
 
             if (history.Length < text.Length || text.Length == 0)
             {

@@ -53,6 +53,7 @@ public class WindowsClipboardMonitorService : IClipboardMonitorService
         private readonly SynchronizationContext? _synchronizationContext;
         private readonly Action<ClipboardHistoryItemBase?> _onClipboardUpdated;
         private readonly ClipboardHistoryItemFactory _historyItemFactory;
+        private bool use_fallback = false;
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -72,6 +73,7 @@ public class WindowsClipboardMonitorService : IClipboardMonitorService
             _onClipboardUpdated = onClipboardUpdated;
             SetParent(Handle, new IntPtr(-3)); // Setup window as MESSAGE ONLY
             Start();
+            use_fallback = true;
         }
 
         public void Start()
@@ -84,13 +86,80 @@ public class WindowsClipboardMonitorService : IClipboardMonitorService
             RemoveClipboardFormatListener(Handle);
         }
 
+        string last_cached = "";
+        int last_image_id = 0;
         protected override void WndProc(ref Message m)
         {
+            do
+            {
+                if (!use_fallback)
+                {
+                    break;
+                }
+
+                string last_cached = "";
+                string current = "";
+
+                Thread.Sleep(10);
+
+                current = Clipboard.GetText();
+
+                if (!string.IsNullOrWhiteSpace(current) && current != last_cached)
+                {
+                    last_cached = current;
+                    var item = _historyItemFactory.BuildNewItem(false);
+
+                    if (item == null)
+                    {
+
+                    }
+                    else if (_synchronizationContext != null)
+                    {
+                        _synchronizationContext.Post(obj => _onClipboardUpdated.Invoke(item), null);
+                    }
+                    else
+                    {
+                        _onClipboardUpdated.Invoke(item);
+                    }
+                }
+
+                if (Clipboard.ContainsImage())
+                {
+                    Image? img = Clipboard.GetImage();
+
+                    if (img != null)
+                    {
+                        int hash = img.GetHashCode();
+
+                        if (hash != last_image_id)
+                        {
+                            last_image_id = hash;
+                            var item = _historyItemFactory.BuildNewItem(true);
+
+                            if (item == null)
+                            {
+
+                            }
+                            else if (_synchronizationContext != null)
+                            {
+                                _synchronizationContext.Post(obj => _onClipboardUpdated.Invoke(item), null);
+                            }
+                            else
+                            {
+                                _onClipboardUpdated.Invoke(item);
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+            while (false);
+
             try
             {
                 if (m.Msg != 0x031D) return; // WM_CLIPBOARDUPDATE
 
-                var item = _historyItemFactory.BuildNewItem();
+                var item = _historyItemFactory.BuildNewItem(false);
                 if (item == null) return;
 
                 if (_synchronizationContext != null)

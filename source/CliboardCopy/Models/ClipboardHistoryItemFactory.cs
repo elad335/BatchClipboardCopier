@@ -16,10 +16,10 @@ public class ClipboardHistoryItemFactory
     /// Build new log item, based on current clipboard content
     /// </summary>
     /// <returns></returns>
-    public ClipboardHistoryItemBase? BuildNewItem()
+    public ClipboardHistoryItemBase? BuildNewItem(bool force_image)
     {
         var text = Clipboard.GetText();
-        if (!string.IsNullOrWhiteSpace(text)) return new ClipboardHistoryItemText(text, DateTime.Now);
+        if (!force_image && !string.IsNullOrWhiteSpace(text)) return new ClipboardHistoryItemText(text, DateTime.Now);
 
         if (_logImages && Clipboard.ContainsImage())
         {
